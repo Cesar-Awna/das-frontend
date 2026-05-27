@@ -25,8 +25,8 @@ const Login = () => {
     if (user && user.password === password) {
       const userData = { email: mail, name: user.name, role: user.role, token: 'test-token-' + Date.now() };
       toast.success('Sesión iniciada correctamente');
-      localStorage.setItem('user', JSON.stringify({ success: true, data: userData }));
-      navigate('/dashboard');
+      localStorage.setItem('user', JSON.stringify(userData));
+      setTimeout(() => navigate('/dashboard'), 500);
     } else {
       toast.error('Credenciales inválidas. Usa: d.caceres@dasconcepcion.cl / 123456');
     }

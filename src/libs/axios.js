@@ -12,11 +12,11 @@ const createInstance = (baseURL) => {
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
-        if (user?.token) {
-          config.headers.Authorization = `Bearer ${user.token}`;
-        }
+        // Usar token si existe, o generar uno dummy para dev
+        const token = user?.token || 'dev-token';
+        config.headers.Authorization = `Bearer ${token}`;
       } catch (e) {
-        // ignorar parse errors
+        console.warn('Error parsing user:', e);
       }
     }
     return config;
