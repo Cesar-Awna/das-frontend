@@ -1,10 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Events from '../services/Events.js';
 
+const isDevMode = () => {
+  const user = localStorage.getItem('user');
+  if (!user) return false;
+  try {
+    const parsed = JSON.parse(user);
+    return parsed.token?.startsWith('dev-token-');
+  } catch {
+    return false;
+  }
+};
+
 export const useEvents = (params) =>
   useQuery({
     queryKey: ['events', 'list', params],
     queryFn: () => Events.list(params),
+    enabled: !isDevMode(),
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -13,7 +25,7 @@ export const useEvent = (id) =>
   useQuery({
     queryKey: ['events', id],
     queryFn: () => Events.getById(id),
-    enabled: !!id,
+    enabled: !isDevMode() && !!id,
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -22,6 +34,7 @@ export const useEventStats = () =>
   useQuery({
     queryKey: ['events', 'stats'],
     queryFn: () => Events.stats(),
+    enabled: !isDevMode(),
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -38,7 +51,7 @@ export const useEventCatalog = (kind) =>
       };
       return map[kind]?.();
     },
-    enabled: !!kind,
+    enabled: !isDevMode() && !!kind,
     refetchOnWindowFocus: false,
     retry: 1,
   });
