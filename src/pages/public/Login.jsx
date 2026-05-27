@@ -12,23 +12,26 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      const response = await Auth.login({ mail, password });
-      if (response?.success) {
-        toast.success(response.message || 'Inicio de sesión exitoso');
-        localStorage.setItem('user', JSON.stringify(response.data));
-        navigate('/dashboard');
-      } else {
-        toast.warn(response?.message || 'No se pudo iniciar sesión');
-      }
-    } catch (err) {
-      const msg =
-        err?.response?.data?.message || err?.message || 'Error al iniciar sesión';
-      toast.error(msg);
-    } finally {
-      setLoading(false);
+    setLoading(true);
+
+    // Hardcoded test users
+    const testUsers = {
+      'd.caceres@dasconcepcion.cl': { password: '123456', name: 'D. Cáceres', role: 'Gestor de calidad' },
+      'm.soto@dasconcepcion.cl': { password: '123456', name: 'M. Soto', role: 'Coordinador' },
+      'r.vidal@dasconcepcion.cl': { password: '123456', name: 'R. Vidal', role: 'Director' },
+    };
+
+    const user = testUsers[mail];
+    if (user && user.password === password) {
+      const userData = { email: mail, name: user.name, role: user.role, token: 'test-token-' + Date.now() };
+      toast.success('Sesión iniciada correctamente');
+      localStorage.setItem('user', JSON.stringify({ success: true, data: userData }));
+      navigate('/dashboard');
+    } else {
+      toast.error('Credenciales inválidas. Usa: d.caceres@dasconcepcion.cl / 123456');
     }
+
+    setLoading(false);
   };
 
   return (
