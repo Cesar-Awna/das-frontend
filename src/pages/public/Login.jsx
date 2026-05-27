@@ -5,7 +5,7 @@ import { useToast, Button } from '../../components/ui/index.js';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const [mail, setMail] = useState('d.caceres@dasconcepcion.cl');
+  const [mail, setMail] = useState('test@test.com');
   const [password, setPassword] = useState('');
   const toast = useToast();
   const navigate = useNavigate();
@@ -14,11 +14,11 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Hardcoded test users
+    // Hardcoded test users (fictitious, not in backend)
     const testUsers = {
-      'd.caceres@dasconcepcion.cl': { password: '123456', name: 'D. Cáceres', role: 'Gestor de calidad' },
-      'm.soto@dasconcepcion.cl': { password: '123456', name: 'M. Soto', role: 'Coordinador' },
-      'r.vidal@dasconcepcion.cl': { password: '123456', name: 'R. Vidal', role: 'Director' },
+      'test@test.com': { password: '123456', name: 'Test User', role: 'Admin' },
+      'demo@test.com': { password: '123456', name: 'Demo User', role: 'Gestor' },
+      'preview@test.com': { password: '123456', name: 'Preview User', role: 'Director' },
     };
 
     const user = testUsers[mail];
@@ -28,7 +28,7 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(userData));
       setTimeout(() => navigate('/dashboard'), 500);
     } else {
-      toast.error('Credenciales inválidas. Usa: d.caceres@dasconcepcion.cl / 123456');
+      toast.error('Credenciales inválidas. Usa: test@test.com / 123456');
     }
 
     setLoading(false);
