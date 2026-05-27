@@ -14,21 +14,20 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Hardcoded test users (fictitious, not in backend)
-    const testUsers = {
-      'test@test.com': { password: '123456', name: 'Test User', role: 'Admin' },
-      'demo@test.com': { password: '123456', name: 'Demo User', role: 'Gestor' },
-      'preview@test.com': { password: '123456', name: 'Preview User', role: 'Director' },
-    };
-
-    const user = testUsers[mail];
-    if (user && user.password === password) {
-      const userData = { email: mail, name: user.name, role: user.role, token: 'test-token-' + Date.now() };
+    // DEV MODE: Accept any email/password combination
+    // Just create a mock user
+    if (mail && password) {
+      const userData = {
+        email: mail,
+        name: mail.split('@')[0],
+        role: 'Gestor de calidad',
+        token: 'dev-token-' + Math.random().toString(36).substring(7)
+      };
       toast.success('Sesión iniciada correctamente');
       localStorage.setItem('user', JSON.stringify(userData));
       setTimeout(() => navigate('/dashboard'), 500);
     } else {
-      toast.error('Credenciales inválidas. Usa: test@test.com / 123456');
+      toast.error('Ingresa email y contraseña');
     }
 
     setLoading(false);
