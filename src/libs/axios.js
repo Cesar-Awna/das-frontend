@@ -26,12 +26,17 @@ const createInstance = (baseURL) => {
   instance.interceptors.response.use(
     (res) => res.data,
     (error) => {
-      // Si 401, limpiar sesión
-      if (error?.response?.status === 401) {
+      // Si 401, limpiar sesión (pero no si es error de conexión)
+      if (error?.response?.status === 401 && error?.response) {
         localStorage.removeItem('user');
         if (window.location.pathname !== '/login') {
           window.location.href = '/login';
         }
+      }
+      // En dev mode (sin backend), ignorar errores de conexión
+      if (!error?.response && error?.message === 'Network Error') {
+        console.warn('Network error (backend unavailable):', error);
+        return { success: false, data: [] };
       }
       throw error;
     }
